@@ -1,0 +1,32 @@
+@import '../_vars';
+
+.calendar {
+  &__grid {
+    padding: 0 7vw;
+  }
+}
+
+.flex-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-radius: 10px;
+
+  &__item {
+    width: 12vw;
+    height: 12vw;
+    border: 1px solid #efefef;
+    box-sizing: border-box;
+
+    &__current {
+      background-color: $bg_color;
+    }
+
+    &:first-child {
+      border-radius: 10px 0 0 0;
+    }
+    &:nth-child(7) {
+      border-radius: 0 10px 0 0;
+    }
+  }
+}
