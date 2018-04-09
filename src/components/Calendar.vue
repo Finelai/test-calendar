@@ -1,9 +1,9 @@
 <template>
   <div class="calendar">
     <div class="calendar__grid flex-grid">
-      <div class="flex-grid__item" v-for="(item, index) in calendar" :key="index">
-        <p v-if="index < 7">{{ `${item.name}, ${item.day}` }}</p>
-        <p v-else>{{ item.day }}</p>
+      <div v-for="(item, index) in calendar" :key="index" :class="item.class">
+        <div v-if="index < 7">{{ `${item.name}, ${item.day}` }}</div>
+        <div v-else>{{ item.day }}</div>
       </div>
     </div>
   </div>
@@ -73,6 +73,7 @@ export default {
           this.calendar.push({
             day: curDayToWrite,
             name: this.getWeekDay(curYearToWrite, curMonthToWrite, curDayToWrite),
+            class: (`${this.curYear}${this.curMonth}${this.curDay}` == `${curYearToWrite}${curMonthToWrite}${curDayToWrite}`) ? 'flex-grid__item flex-grid__item--current' : 'flex-grid__item flex-grid__item--empty',
           });
         } else {
           curMonthToWrite++;
