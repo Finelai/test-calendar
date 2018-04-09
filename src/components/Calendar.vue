@@ -1,8 +1,9 @@
 <template>
   <div class="calendar">
     <div class="calendar__grid flex-grid">
-      <div class="flex-grid__item" v-for="(item, index) in 35" :key="index">
-        {{ index+1 }}
+      <div class="flex-grid__item" v-for="(item, index) in calendar" :key="index">
+        <p v-if="index < 7">{{ `${item.name}, ${item.day}` }}</p>
+        <p v-else>{{ item.day }}</p>
       </div>
     </div>
   </div>
@@ -13,17 +14,26 @@ export default {
   name: 'calendar',
   data () {
     return {
+      header: 'Календарь на',
       curYear: '',
       curMonth: '',
       curDay: '',
-      header: 'Календарь на',
+      calendar: [],
     }
   },
   created() {
     this.getCurDay();
-    this.$emit('header', `${this.header} ${this.curDay} - ${this.curMonth} - ${this.curYear}`);
+    this.$emit('header', `${this.header} ${this.curYear} год`);
   },
   methods: {
+    getLastDayOfMonth(year, month) {
+      const date = new Date(year, month + 1, 0);
+      return date.getDate();
+    },
+    getWeekDay(year, month, day) {
+      const date = new Date(year, month, day);
+      return date.toLocaleString('ru', {weekday: 'long'});
+    },
     getCurDay() {
       // получаем текущие данные и записываем их
       const curDate = new Date();
@@ -31,29 +41,52 @@ export default {
       this.curMonth = curDate.getMonth();
       this.curDay = curDate.getDate();
       const curWeekDay = curDate.toLocaleString('ru', {weekday: 'short'});
-      const weeksDaysArray = [ 'пнд', 'вт', 'ср', 'чтв', 'пн', 'сб', 'вс' ];
+      const weeksDaysArray = [ 'пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс' ];
       const daysBefore = weeksDaysArray.indexOf(curWeekDay);
-      console.log(curWeekDay, weeksDaysArray.indexOf(curWeekDay));
-      if (daysBefore === 0) {
-        // текущая дата понедельник
-      } else if (daysBefore = this.curDay) {
-        // последнее число предыдущего месяца
-      } else if (daysBefore < this.curDay) {
-        // this.curDay - daysBefore и получаем число дней текущего месяца
-        // выучисляем дни в текущем месяце и вычитаем из них полученное число
-        // результат прибавляем к след месяцу
-      } else if (daysBefore > this.curDay) {
-        // daysBefore - this.curDay и получаем число дней предыдущего месяца
-        // вычитаем из числа дней полученное значение
-        // 
+
+      let curYearToWrite = this.curYear;
+      let curMonthToWrite = this.curMonth;
+      let curDayToWrite = this.curDay;
+      let maxDays = this.getLastDayOfMonth(curYearToWrite, curMonthToWrite);
+
+      if (daysBefore > 0) {
+        // текущая дата не понедельник
+        let diff = curDayToWrite - daysBefore;
+        if (diff < 0) {
+          // переход на прошлый месяц
+          if (curMonthToWrite === 0) {
+            curYearToWrite--;
+            curMonthToWrite = 11;
+          } else {
+            curMonthToWrite--;
+          }
+          curDayToWrite = maxDays - Math.abs(diff);
+        } else {
+          // без перехода на прошлый месяц
+          curDayToWrite = diff;
+        }
+        maxDays = this.getLastDayOfMonth(curYearToWrite, curMonthToWrite);
       }
-      // сравниваем количество дней до понедельника и текущее число
-      // если дней меньше, то вычитаем
-      // если дней больше, то вычитаем из дней до пнд текущее число
-      // - остаток вычитаем из предыдущего месяца предварительно вычислив его количество дней
-      // берем число понедельника и в цикле добавляем в массив 35 дней начиная с полученного числа, указав до запятой день недели
-      // при выводе первые 6 индексов выводим с запятой, а потом только после запятой
-    }
+
+      for (let n = 0; n < 36; n++) {
+        if (curDayToWrite <= maxDays) {
+          this.calendar.push({
+            day: curDayToWrite,
+            name: this.getWeekDay(curYearToWrite, curMonthToWrite, curDayToWrite),
+          });
+        } else {
+          curMonthToWrite++;
+          if (curMonthToWrite > 11) {
+            curMonthToWrite = 0;
+            curYearToWrite++;
+            n--;
+          }
+          maxDays = this.getLastDayOfMonth(curYearToWrite, curMonthToWrite);
+          curDayToWrite = 0;
+        }
+        curDayToWrite++;
+      }
+    },
   },
 }
 </script>
