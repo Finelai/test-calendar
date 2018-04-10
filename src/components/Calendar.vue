@@ -12,11 +12,13 @@
       </div>
     </div>
     <div class="calendar__grid flex-grid">
-      <div v-for="(item, index) in calendar" :key="index" :class="item.class">
-        <div>
-          <p>
-            <span> <span v-if="index < 7">{{ `${item.name},` }}</span> {{ item.day }}</span>
-          </p>
+      <div v-for="(item, index) in calendar" :key="index" :class="item.class" @click="select(index)">
+        <p>
+          <span> <span v-if="index < 7">{{ `${item.name},` }}</span> {{ item.day }}</span>
+        </p>
+        <div v-if="item.eventTitle !== ''">
+          <h3>{{ item.eventTitle }}</h3>
+          <p>{{ item.eventDesc }}</p>
         </div>
       </div>
     </div>
@@ -33,6 +35,7 @@ export default {
       curMonth: '',
       curDay: '',
       calendar: [],
+      selected: null,
     }
   },
   created() {
@@ -87,6 +90,8 @@ export default {
             day: curDayToWrite,
             name: this.getWeekDay(curYearToWrite, curMonthToWrite, curDayToWrite),
             class: (`${this.curYear}${this.curMonth}${this.curDay}` == `${curYearToWrite}${curMonthToWrite}${curDayToWrite}`) ? 'flex-grid__item flex-grid__item--current' : 'flex-grid__item flex-grid__item--empty',
+            eventTitle: '',
+            eventDesc: '',
           });
         } else {
           curMonthToWrite++;
@@ -100,6 +105,32 @@ export default {
         }
         curDayToWrite++;
       }
+    },
+    select(index) {
+      if (this.selected !== null) {
+        this.calendar[this.selected].class = 'flex-grid__item flex-grid__item--empty';
+      }
+      this.calendar[index].class = 'flex-grid__item flex-grid__item--select';
+      this.selected = index;
+    },
+    addEvent() {
+      if (this.selected !== null) {
+        let title = prompt("Введите заголовок события", '');
+        if (title !== '' && title !== null) {
+          let desc = prompt("Введите описание события", '');
+          if (desc !== '' && desc !== null) {
+            this.calendar[this.selected].eventTitle = title;
+            this.calendar[this.selected].eventDesc = desc;
+            this.selected = null;
+          }
+        }
+      } else {
+        alert('Сначала выберите дату события нажатием на ячейку');
+      }
+    },
+    refreshCalendar() {
+      this.calendar = [];
+      this.getCurDay();
     },
   },
 }

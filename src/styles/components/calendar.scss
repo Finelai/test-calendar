@@ -1,6 +1,8 @@
 @import '../_vars';
 
 .calendar {
+  margin-bottom: 10vw;
+
   &__header-wrap {
     background-color: $bg_color;
     border-bottom: 1px solid darken($bg_color, 20%);
@@ -73,9 +75,14 @@
     padding: 1vw;
     border: 1px solid #efefef;
     box-sizing: border-box;
+    cursor: pointer;
 
     &--current {
       background-color: $bg_color;
+    }
+
+    &--select {
+      background-color: $select_bg_color;
     }
 
     &:first-child {
