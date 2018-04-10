@@ -1,9 +1,23 @@
 <template>
   <div class="calendar">
+    <div class="calendar__header-wrap">
+      <div class="calendar__header">
+        <h1>{{ `${header} ${curYear} год` }}</h1>
+        <button @click="addEvent">Добавить</button>
+        <button @click="refreshCalendar">Обновить</button>
+        <div class="calendar__search">
+          <i class="search-icon"></i>
+          <input type="text" placeholder="Событие, дата или участник">
+        </div>
+      </div>
+    </div>
     <div class="calendar__grid flex-grid">
       <div v-for="(item, index) in calendar" :key="index" :class="item.class">
-        <div v-if="index < 7">{{ `${item.name}, ${item.day}` }}</div>
-        <div v-else>{{ item.day }}</div>
+        <div>
+          <p>
+            <span> <span v-if="index < 7">{{ `${item.name},` }}</span> {{ item.day }}</span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -23,7 +37,6 @@ export default {
   },
   created() {
     this.getCurDay();
-    this.$emit('header', `${this.header} ${this.curYear} год`);
   },
   methods: {
     getLastDayOfMonth(year, month) {

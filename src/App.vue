@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <h1>{{ header }}</h1>
-    <calendar @header="header = $event"></calendar>
+    <calendar></calendar>
   </div>
 </template>
 
@@ -10,15 +9,10 @@ import calendar from './components/Calendar';
 
 export default {
   name: 'app',
-  data() {
-    return {
-      header: '',
-    }
-  },
   components: {
     calendar,
   },
 }
 </script>
 
-<style src="./styles/normalize.css" lang="css"></style>
+<style src="./styles/normalize.css" lang="scss"></style>
