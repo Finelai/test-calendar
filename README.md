@@ -14,4 +14,4 @@
 - vue (cli)
 - sass
 
-> Без использования сторонних JS/CSS-библиотек
+### ДЕМО: https://finelai.github.io/test-calendar/
