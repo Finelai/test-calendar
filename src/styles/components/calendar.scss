@@ -10,13 +10,22 @@
     margin-bottom: 16px;
   }
   &__header {
-    height: 150px;
     padding: 16px 0;
     width: 84vw;
     margin: 0 auto;
 
     h1 {
       margin: 0 0 60px;
+      font-size: 32px;
+
+      @include respond-to($tablet-portrait) {
+        margin: 0 0 30px;
+      }
+
+      @include respond-to($phone) {
+        font-size: 24px;
+      }
+
     }
     button {
       background-color: $primary_btn_color;
@@ -34,6 +43,12 @@
     height: 30px;
     width: 340px;
     font-size: 0;
+
+    @include respond-to($tablet-portrait) {
+      float: none;
+      margin-top: 16px;
+      width: 300px;
+    }
 
     i {
       display: inline-block;
@@ -55,6 +70,10 @@
       padding: 0 10px;
       font-size: 16px;
       vertical-align: middle;
+
+      @include respond-to($tablet-portrait) {
+        width: 250px;
+      }
     }
   }
   &__navigation {
@@ -110,12 +129,34 @@
     border: 1px solid #efefef;
     box-sizing: border-box;
     cursor: pointer;
+    overflow: hidden;
+
+    @include respond-to($tablet-portrait) {
+      @for $i from 1 through 7 {
+        &:nth-child(#{$i}) {
+          height: 24vw;
+        }
+        &:nth-child(#{$i}) > p > span:first-child {
+          display: inline-block;
+          vertical-align: top;
+          width: 3vw;
+          font-size: 3vw; 
+          transform: rotate(90deg);
+        }
+      }
+    }
 
     &:first-child {
       border-radius: 10px 0 0 0;
     }
     &:nth-child(7) {
       border-radius: 0 10px 0 0;
+    }
+    &:nth-child(29) {
+      border-radius: 0 0 0 10px;
+    }
+    &:last-child {
+      border-radius: 0 0 10px 0;
     }
 
     &--current {
@@ -127,6 +168,7 @@
     }
 
     p {
+      color: $second_txt_color;
       text-transform: capitalize;
     }
   }

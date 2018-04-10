@@ -20,7 +20,7 @@
     <div class="calendar__grid flex-grid">
       <div v-for="(item, index) in calendar" :key="index" :class="item.class" @click="select(index)">
         <p>
-          <span> <span v-if="index < 7">{{ `${item.name},` }}</span> {{ item.day }}</span>
+          <span v-if="index < 7">{{ `${item.name},` }}</span> <span>{{ item.day }}</span>
         </p>
         <div v-if="item.eventTitle !== ''">
           <h3>{{ item.eventTitle }}</h3>
